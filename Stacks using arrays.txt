@@ -1,0 +1,80 @@
+#include <iostream>
+
+using namespace std;
+
+class Stack
+{
+    private:
+        int size, top, *values;
+    public:
+        Stack(int size)
+        {
+            this->size = size;
+            top = -1;
+            values = new int[size];
+        }
+
+        bool isFull()
+        {
+            if(top >= size - 1)
+                {
+                    return true;
+                }
+            else return false;
+        }
+        bool isEmpty()
+        {
+            if(top <= -1)
+                {
+                    return true;
+                }
+            else return false;
+        }
+        void push(int a)
+        {
+            if(!isFull())
+                {
+                    top++;
+                    values[top] = a;
+                }
+        }
+        int pop()
+        {
+            int retVal = 0;
+            if(!isEmpty())
+                {
+                    retVal = values[top];
+                    top--;
+                }
+                return retVal;
+        }
+
+};
+
+
+
+
+int main()
+{
+    Stack s(10);
+    for(int i = 0; i < 10; i++)
+        {
+            s.push(i);
+        }
+    for(int i = 0; i < 10; i++)
+        {
+            cout << s.pop();
+        }cout <<endl;
+
+        s.push(11);
+     for(int i = 0; i < 10; i++)
+        {
+            cout << s.pop();
+        }cout << endl;
+
+
+
+
+
+    return 0;
+}

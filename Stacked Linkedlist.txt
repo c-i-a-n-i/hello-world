@@ -1,0 +1,79 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *prev, *next;
+    Node(int data)
+    {
+        this->data = data;
+        prev = NULL;
+        next = NULL;
+    }
+};
+
+class StackedLL
+{
+    private:
+        Node *front, *back;
+    public:
+        StackedLL()
+        {
+            front = NULL;
+            back = NULL;
+        }
+
+        bool isEmpty()
+        {
+            return (back == NULL)?true:false;
+        }
+        int pop()
+        {
+            if(!isEmpty())
+            {
+                int a = front->data;
+                front = front->next;
+                delete front->prev;
+                return a;
+            }
+        }
+        int push(int a)
+        {
+            Node *n = new Node(a);
+            if(isEmpty())
+            {
+                front = n;
+                back = n;
+            }
+            else
+            {
+            front->prev = n;
+            n->next = front;
+            front = n;
+            }
+
+        }
+        void display()
+        {
+            Node *temp = front;
+            while(temp != NULL)
+            {
+                cout <<temp->data;
+                temp = temp->next;
+            }cout<<endl;
+        }
+
+};
+
+int main()
+{
+    StackedLL sll;
+    sll.push(2);
+    sll.push(5);
+    sll.display();
+    sll.pop();
+    sll.display();
+    return 0;
+}

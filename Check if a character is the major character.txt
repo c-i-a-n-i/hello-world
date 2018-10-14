@@ -1,0 +1,17 @@
+#include <iostream>
+
+using namespace std;
+
+int A[] = {11,3,3,3,3,9,2,18,3};
+int App[20];
+int main()
+{
+    for(int i = 0; i <=8; i++)
+    {
+       App[A[i]]++;
+
+       if(App[A[i]] >= 5){return A[i];}
+    }
+    return -1;
+}
+

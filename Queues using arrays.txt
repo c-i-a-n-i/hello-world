@@ -1,0 +1,86 @@
+#include <iostream>
+
+using namespace std;
+
+class Queue
+{
+    private:
+        int size, front, end, *values;
+    public:
+        Queue(int size)
+        {
+            this->size = size;
+            front = -1;
+            end = -1;
+            values = new int[size];
+        }
+        void enqueue(int a)
+        {
+            if(!isFull())
+            {
+                if(isEmpty())
+                {
+                    front = (front + 1)%size;
+                    end = (end + 1)%size;
+                }
+                else{end = (end + 1)%size;}
+                values[end] = a;
+            }
+        }
+        int dequeue()
+        {
+            if(!isEmpty())
+            {
+                int retVal = front;
+                if(front==end)                  // BE CAREFUL ABOUT THE CORNER CASES!!!- When front = end: only 1 element left
+                {
+                    front = -1; end = -1;       //for cases where one element is left, this means the queue is almost empty,
+
+                }else{front = (front + 1)%size;} //hence dequeuing will return it to empty state of -1 for both front and end, if not, dequeue normally
+
+                return values[retVal];
+            }
+
+        }
+        bool isEmpty()
+        {
+            if((front== -1)&&(end== -1))
+            {
+                return true;
+            }
+            else return false;
+
+        }
+        bool isFull()
+        {
+            if((end + 1)%size == front)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+};
+
+int main()
+{
+    Queue q(10);        //creates a circular queue of size 10
+    for(int i = 0; i < 10; i++)     //enqueues 10 positions with numbers 1- 10
+    {
+        q.enqueue(i);
+    }
+    for(int i = 0; i < 5; i++)      //dequeues the first 5 positions
+    {
+        cout << q.dequeue();
+    }cout<<endl;
+    for(int i = 0; i < 5; i++)      //enqueues 5 positions with 0, 10, 20, 30, 40
+    {
+        q.enqueue(i*10);
+    }
+    for(int i = 0; i < 10; i++)     //dequeues everything
+    {
+        cout << q.dequeue();
+    }cout<<endl;
+
+    return 0;
+}

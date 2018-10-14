@@ -1,0 +1,24 @@
+#include <iostream>
+
+using namespace std;
+
+int BS(int arr[], int l, int r, int key);
+
+int main()
+{
+    int arr[] = {1, 7, 9, 14, 19, 23, 27, 29, 34, 35, 40};
+    cout<<BS(arr, 0, 10, 36)<<endl;
+}
+
+int BS(int arr[], int l, int r, int key)
+{
+    int m = (l + r)/2;
+
+    if(l > r) return -1;    //return -1 if the key isn't in the array
+
+    if(key == arr[m]) return m;     //return the key
+
+    if(key < arr[m]) return BS(arr, l, m - 1, key);     //search left
+
+    return BS(arr, m + 1, r, key);      //search right
+}

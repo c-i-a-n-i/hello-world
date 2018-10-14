@@ -1,0 +1,92 @@
+#!/bin/python3
+
+import os
+import sys
+
+
+# Complete the function below.
+
+def processQueries(queries):
+    #testing the inputs
+    response = []
+    orders = dict()
+    
+    for query in queries:
+        q = list(query.split(','))
+        q.append(0) #appending matched quantity to q
+        q.append(0) #appending cancel to q
+        if (q[0] == 'N'):
+            if(len(q) != 10 or not q[1].isdigit() or q[1] in orders 
+                    #or (len(orders) != 0 and q[2] < max([orders[x][0] for x in orders])) 
+                    or not q[3].isalpha() or len(q[4]) != 1 or q[4] not in 'MLI' or len(q[5]) != 1 or q[5] not in 'BS' 
+                    or float(q[6]) < 0 or (q[4] == 'M' and float(q[6]) != 0) or not q[7].isdigit() or int(q[7]) < 0):
+                response.append(q[1] + ' - Reject - 303 - Invalid order details')
+            else:
+                # add details to dictionary
+                orders[q[1]] = [q[2], q[3], q[4], q[5], q[6], q[7], q[8], q[9]]
+                response.append(q[1] + ' - Accept')
+            pass
+        
+        
+        elif (q[0] == 'A'):
+            def same_details():
+                for i in [3,4,5]:
+                    if(q[i] != orders[q[1]][i - 2]):
+                        return False
+                return True
+            if(q[1] not in orders ):
+                response.append(q[1] + ' - AmendReject - 404 - Order does not exist')
+                
+            elif(float(q[6]) < 0 or not q[7].isdigit() or int(q[7]) < 0 or not same_details()):
+                response.append(q[1] + ' - AmendReject - 101 - Invalid amendment details')
+            else:
+                #amend details if it is not fully matched or cancelled
+                if(orders[q[1]][6] == orders[q[1]][5] or orders[q[1]][7] == 1):
+                    response.append(q[1] + ' - AmendReject - 101 - Invalid amendment details')
+                else:
+                    # if(q[7] <= orders[q[1]][6]):    #if the amendment amount <= current matched amount, close order
+                    #     break
+                    old_timestamp = orders[q[1]][0]
+                    orders[q[1]] = q
+                    response.append(q[1] + ' - AmendAccept')
+                    # if(orders[q[1]][6] <= q[8]):    #if it is not a down amendment, retain the timestamp
+                    #     orders[q[1]][0] = old_timestamp   
+                    #to fix bug for updated prices if it is not a down amendment
+            pass
+        
+        
+        
+        elif (q[0] == 'X'):
+            if(q[1] not in orders or  orders[q[1]][7] == 1):
+                response.append(q[1] + ' - CancelReject - 404 - Order does not exist')
+                
+            else:
+                orders[q[1]][7] = 1
+                response.append(q[1] + ' - CancelAccept')
+            pass
+        elif (q[0] == 'M'):
+            pass
+        elif (q[0] == 'Q'):
+            pass
+        else:
+            response.append('Unrecognized operation ' + q[0])
+
+    return response
+
+if __name__ == '__main__':
+    f = open(os.environ['OUTPUT_PATH'], 'w')
+
+    queries_size = int(input())
+
+    queries = []
+    for _ in range(queries_size):
+        queries_item = input()
+        queries.append(queries_item)
+
+    response = processQueries(queries)
+
+    f.write("\n".join(response))
+
+    f.write('\n')
+
+    f.close()

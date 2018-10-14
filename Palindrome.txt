@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+using namespace std;
+
+bool isPalindrome(int a);
+void toPalindrome(int *a_ptr);
+
+int main() {
+    string s;
+    getline(cin, s);
+    while(s.size() > 0)
+    {
+        int n = atoi(s.substr(0,1).c_str());
+        char c = s.at(1);
+        for(int i = 0; i < n; i++)
+        {
+            cout <<c;
+        }cout <<endl;
+        s.erase(0,2);
+    }
+
+    return 0;
+
+}
+
+void toPalindrome(int *a_ptr)
+{
+    int original_a = *a_ptr;
+    int a = *a_ptr;
+    int reverse_a = 0;
+    while(a != 0)
+    {
+        int digit = a%10;
+        reverse_a = reverse_a*10 + digit;
+        a = a/10;
+    }
+    *a_ptr = original_a + reverse_a;
+}
+
+bool isPalindrome(int a)
+{
+    int original_a = a;
+    int reverse_a = 0;
+    while(a != 0)
+    {
+        int digit = a%10;
+        reverse_a = reverse_a*10 + digit;
+        a = a/10;
+    }
+
+    return (original_a==reverse_a)?true:false;
+}
